@@ -1,0 +1,425 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<style>
+  .bottom-three {
+      margin-bottom: 5cm;
+  }
+</style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="main.css" rel="stylesheet" media="all">
+    <meta name="description" content="Zoneformer: On-device Neural Beamformer For In-car Multi-zone Speech Separation, Enhancement and Echo Cancellation" />
+    <meta name="keywords" content="speech separation, neural beamformer, distortionless constraint, global spectral and spatial information">
+    <script>
+    function buttonSwitch(id, text) {
+        old_src = document.getElementById(id).src;
+        ind = old_src.lastIndexOf('/');
+        document.getElementById(id).src = old_src.substr(0, ind + 1) + text;
+    }
+    </script>
+    <title>Zoneformer: On-device Neural Beamformer For In-car Multi-zone Speech Separation, Enhancement and Echo Cancellation</title>
+</head>
+
+
+
+
+<body>
+    <div id="top_arrow" style="position: fixed; bottom: 10px; right: 10px;">
+        <a href="#title"><img src="./figures/top_arrow.jpg" style="border: 0pt none ; width: 26px; height: 26px;"/></a>
+    </div>
+    
+    <!-- <p  style="margin-bottom:3cm;">"  "</p> -->
+    <h2 id="title" class="auto-style1"><center> Zoneformer: On-device Neural Beamformer For In-car Multi-zone Speech Separation, Enhancement and Echo Cancellation </center></h2>
+    <p class="auto-style7" align="center">
+        Anonymous submission to INTERSPEECH 2023
+    </p>
+    <p class="auto-style7" align="center">
+      (Strictly follow the double-blind review requirement. Only the reviewers who know the website address can access it. The account is anonymous and temporary. The repository is private.)
+    </p>    
+
+
+        
+        <!-- Image with description -->
+        <p class="auto-style5">&nbsp;</p>
+        <p class="style2", style="color:blue;"><strong><span class="auto-style6"><u>Proposed Zoneformer: On-device Neural Beamformer</u></span></strong></p>
+        <table style="width:1250px" align="center">
+            <tr><td><center><img width=1250px alt="" src="figures/Network.png"></center></td></tr>
+            <tr><td><p align="center" class="auto-style5-j">Figure 1. The system framework includes the full-band complex-valued ratio filter (cRF) based covariance matrix estimator and the proposed on-device Mel-subband neural beamformer with the integration of global spectral and spatial information. The network is optimized in an end-to-end mode using the proposed distortionless constraint loss alongside SiSNR and magnitude L1 losses.</p></td></tr>
+        </table>
+
+        <!-- Outline -->
+        <p class="auto-style5">&nbsp;</p>
+        <p id="performance" , class="auto-style4", style="color:blue;"><strong><u>Outline: </u></strong></p>
+        <p class="auto-style4" align="left"> 1 Separated spectrograms of Fig. 2 in the paper </p>
+        <p class="auto-style4" align="left"> 2 Real-world recording demo 1: Mixture = S1 + S3 + echo + noise </p>
+        <p class="auto-style4" align="left"> 3 Comparisons with different baselines in the study </p>          
+        <p class="auto-style4" align="left"> 4 Real-world recording demo 2: Mixture = S1 + S4 + noise </p>
+        <p class="auto-style4" align="left"> 5 Real-world recording demo 3: Mixture = S3 + S4 + noise </p>      
+        <p class="auto-style4" align="left"> 6 Python sample code of the proposed model and the model summary </p>  
+        <p class="auto-style4" align="left"> 7 Appendix </p>                          
+
+        <!-- Performance -->
+        <p class="auto-style5">&nbsp;</p>
+        <p id="performance" , class="auto-style4", style="color:blue;"><strong><u>1 Separated signals of four car zones by the proposed system (xv) in the Fig. 2 of the paper.</u></strong></p>
+
+        
+        <!-- Audio 01 -----------------------------------------------------------------------------------------------------------------------> 
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios/mix_3spk___12-37.png" width="300" height="150" /></center></p>
+              <p><center><audio width="490" controls><source src="audios/mix_3spk___12-37.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>No Processing (Mixture = S1 + S2 + S4 + echo + noise)</strong></center></p>
+              <p><center><strong>Speakers speaking in Zone1, Zone2, and Zone4 (The speaker in Zone3 is absent in this example. The mixture contains overlapping speech, echo, and noise.)</strong></center></p>
+            </td>
+          </table>
+        </center>
+        <center>
+        <table width="1500" border="1">
+          <td width="300">
+            <p><center><img src="audios/reverbClean_zone1_left___12-37.png" width="300" height="150" /></center></p>
+            <p><center><audio width="290" controls><source src="audios/reverbClean_zone1_left___12-37.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+            <p><center><strong>Reverb Clean Reference (Zone1: S1)</strong></center></p>
+          </td>
+          <td width="300">
+            <p><center><img src="audios/reverbClean_zone2_right___12-37.png" width="300" height="150" /></center></p>
+            <p><center><audio width="290" controls><source src="audios/reverbClean_zone2_right___12-37.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+            <p><center><strong>Reverb Clean Reference (Zone2: S2)</strong></center></p>
+          </td>
+          <td width="300">
+            <p><center><img src="audios/reverbClean_zone3_right_back___12-37.png" width="300" height="150" /></center></p>
+            <p><center><audio width="290" controls><source src="audios/reverbClean_zone3_right_back___12-37.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+            <p><center><strong>Reverb Clean Reference (Zone3: S3)</strong></center></p>
+          </td>
+          <td width="300">
+            <p><center><img src="audios/reverbClean_zone4_left_back___12-37.png" width="300" height="150"/></center></p>
+            <p><center><audio width="290" controls><source src="audios/reverbClean_zone4_left_back___12-37.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+            <p><center><strong>Reverb Clean Reference (Zone4: S4)</strong></center></p>
+          </td>
+        </table>
+      </center>
+
+      <center>
+      <table width="1500" border="1">
+        <td width="300">
+          <p><center><img src="audios/enh_zone1_left___12-37.png" width="300" height="150" /></center></p>
+          <p><center><audio width="290" controls><source src="audios/enh_zone1_left___12-37.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+          <p><center><strong>Proposed system (xv) separated (Zone1: S1)</strong></center></p>
+        </td>
+        <td width="300">
+          <p><center><img src="audios/enh_zone2_right___12-37.png" width="300" height="150" /></center></p>
+          <p><center><audio width="290" controls><source src="audios/enh_zone2_right___12-37.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+          <p><center><strong>Proposed system (xv) separated (Zone2: S2)</strong></center></p>
+        </td>
+        <td width="300">
+          <p><center><img src="audios/enh_zone3_right_back___12-37.png" width="300" height="150" /></center></p>
+          <p><center><audio width="290" controls><source src="audios/enh_zone3_right_back___12-37.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+          <p><center><strong>Proposed system (xv) separated (Zone3: S3)</strong></center></p>
+        </td>
+        <td width="300">
+          <p><center><img src="audios/enh_zone4_left_back___12-37.png" width="300" height="150"/></center></p>
+          <p><center><audio width="290" controls><source src="audios/enh_zone4_left_back___12-37.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+          <p><center><strong>Proposed system (xv) separated (Zone4: S4)</strong></center></p>
+        </td>
+      </table>
+    </center>      
+
+        <!-- Performance of real data-->
+        <p class="auto-style5">&nbsp;</p>
+        <p id="performance" , class="auto-style4", style="color:blue;"><strong><u>2 Real-world recording demo 1: Separated signals of four car zones by the proposed system (xv).</u></strong></p>
+
+        
+        <!-- Audio 02 : Real demo1 -----------------------------------------------------------------------------------------------------------------------> 
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios_real/mixture_1st-48-p00000015-00000418-f-norm-21-b.png" width="300" height="150" /></center></p>
+              <p><center><audio width="490" controls><source src="audios_real/mixture_1st-48-p00000015-00000418-f-norm-21-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>No Processing (Mixture = S1 + S3 + echo + noise)</strong></center></p>
+              <p><center><strong>Speakers speaking in Zone1 and Zone3 (The speakers in Zone2 and Zone4 are absent in this example. The mixture contains overlapping speech, echo, and noise.)</strong></center></p>
+            </td>
+          </table>
+        </center>
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios_real/enh_zone1_copilot_front_1st-48-p00000015-00000418-f-norm-21-b.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_real/enh_zone1_copilot_front_1st-48-p00000015-00000418-f-norm-21-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed system (xv) separated (Zone1: S1)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_real/enh_zone2_mainDriver_front_1st-48-p00000015-00000418-f-norm-21-b.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_real/enh_zone2_mainDriver_front_1st-48-p00000015-00000418-f-norm-21-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed system (xv) separated (Zone2: S2)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_real/enh_zone3_back_of_mainDriver_1st-48-p00000015-00000418-f-norm-21-b.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_real/enh_zone3_back_of_mainDriver_1st-48-p00000015-00000418-f-norm-21-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed system (xv) separated (Zone3: S3)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_real/enh_zone4_back_of_copilot_1st-48-p00000015-00000418-f-norm-21-b.png" width="300" height="150"/></center></p>
+              <p><center><audio width="290" controls><source src="audios_real/enh_zone4_back_of_copilot_1st-48-p00000015-00000418-f-norm-21-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed system (xv) separated (Zone4: S4)</strong></center></p>
+            </td>
+          </table>
+        </center>   
+
+
+         <!-- Performance of comparisons among different baselines-->
+         <p class="auto-style5">&nbsp;</p>
+         <p id="performance" , class="auto-style4", style="color:blue;"><strong><u>3 Comparisons with different baselines in the study.</u></strong></p>
+        
+        <!-- Audio on simulated example __27-28___ for comparisons among different baselines -----------------------------------------------------------------------------------------------------------------------> 
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios_simu_compare/mix___27-28.png" width="300" height="150" /></center></p>
+              <p><center><audio width="490" controls><source src="audios_simu_compare/mix___27-28.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>No Processing (Mixture = S2 + S3 + S4 + echo + noise)</strong></center></p>
+              <p><center><strong>Speakers speaking in Zone2, Zone3 and Zone4 (The speaker in Zone1 is absent in this example. The mixture contains overlapping speech, echo, and noise.) </strong></center></p>
+            </td>
+          </table>
+        </center>
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios_simu_compare/Ref_Zone1_1.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/Ref_Zone1_1.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Reverb Clean Reference (Zone1: S1)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/Ref_Zone2_1.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/Ref_Zone2_1.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Reverb Clean Reference (Zone2: S2)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/Ref_Zone3_1.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/Ref_Zone3_1.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Reverb Clean Reference (Zone3: S3)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/Ref_Zone4_1.png" width="300" height="150"/></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/Ref_Zone4_1.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Reverb Clean Reference (Zone4: S4)</strong></center></p>
+            </td>
+          </table>
+        </center>           
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios_simu_compare/ConvTasNet_Zone1_1.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/ConvTasNet_Zone1_1.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Multi-channel ConvTasNet (Zone1: S1)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/ConvTasNet_Zone2_1.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/ConvTasNet_Zone2_1.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Multi-channel ConvTasNet (Zone2: S2)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/ConvTasNet_Zone3_1.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/ConvTasNet_Zone3_1.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Multi-channel ConvTasNet (Zone3: S3)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/ConvTasNet_Zone4_1.png" width="300" height="150"/></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/ConvTasNet_Zone4_1.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Multi-channel ConvTasNet (Zone4: S4)</strong></center></p>
+            </td>
+          </table>
+        </center>           
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios_simu_compare/LSTM_Zone1_1.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/LSTM_Zone1_1.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Multi-channel LSTM + MHSA (Zone1: S1)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/LSTM_Zone2_1.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/LSTM_Zone2_1.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Multi-channel LSTM + MHSA (Zone2: S2)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/LSTM_Zone3_1.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/LSTM_Zone3_1.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Multi-channel LSTM + MHSA (Zone3: S3)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/LSTM_Zone4_1.png" width="300" height="150"/></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/LSTM_Zone4_1.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Multi-channel LSTM + MHSA (Zone4: S4)</strong></center></p>
+            </td>
+          </table>
+        </center>  
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios_simu_compare/baseline_lightweight_mel-nnbf-without-global-emb-and-distort-loss_zone1_left___27-28.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/baseline_lightweight_mel-nnbf-without-global-emb-and-distort-loss_zone1_left___27-28.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Mel-subband neural BF baseline (system vi in the paper) (Zone1: S1)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/baseline_lightweight_mel-nnbf-without-global-emb-and-distort-loss_zone2_right___27-28.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/baseline_lightweight_mel-nnbf-without-global-emb-and-distort-loss_zone2_right___27-28.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Mel-subband neural BF baseline (system vi in the paper)  (Zone2: S2)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/baseline_lightweight_mel-nnbf-without-global-emb-and-distort-loss_zone3_right_back___27-28.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/baseline_lightweight_mel-nnbf-without-global-emb-and-distort-loss_zone3_right_back___27-28.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Mel-subband neural BF baseline (system vi in the paper)  (Zone3: S3)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/baseline_lightweight_mel-nnbf-without-global-emb-and-distort-loss_zone4_left_back___27-28.png" width="300" height="150"/></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/baseline_lightweight_mel-nnbf-without-global-emb-and-distort-loss_zone4_left_back___27-28.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Mel-subband neural BF baseline (system vi in the paper)  (Zone4: S4)</strong></center></p>
+            </td>
+          </table>
+        </center>  
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios_simu_compare/proposed_ondevice_nnbf_enh_zone1_left___27-28.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/proposed_ondevice_nnbf_enh_zone1_left___27-28.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed on-device system (xv) (Zone1: S1)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/proposed_ondevice_nnbf_enh_zone2_right___27-28.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/proposed_ondevice_nnbf_enh_zone2_right___27-28.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed on-device system (xv) (Zone2: S2)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/proposed_ondevice_nnbf_enh_zone3_right_back___27-28.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/proposed_ondevice_nnbf_enh_zone3_right_back___27-28.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed on-device system (xv) (Zone3: S3)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_simu_compare/proposed_ondevice_nnbf_enh_zone4_left_back___27-28.png" width="300" height="150"/></center></p>
+              <p><center><audio width="290" controls><source src="audios_simu_compare/proposed_ondevice_nnbf_enh_zone4_left_back___27-28.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed on-device system (xv) (Zone4: S4)</strong></center></p>
+            </td>
+          </table>
+        </center>         
+        
+         <!-- Performance of real data demo 2-->
+         <p class="auto-style5">&nbsp;</p>
+         <p id="performance" , class="auto-style4", style="color:blue;"><strong><u>4 Real-world recording demo 2: Separated signals of four car zones by the proposed system (xv).</u></strong></p>
+        
+        <!-- Audio 02 : Real demo2 -----------------------------------------------------------------------------------------------------------------------> 
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios_real_demo2/mix_1st-48-p00000015-00000513-f-norm-21-b.png" width="300" height="150" /></center></p>
+              <p><center><audio width="490" controls><source src="audios_real_demo2/mix_1st-48-p00000015-00000513-f-norm-21-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>No Processing (Mixture = S1 + S4 + noise)</strong></center></p>
+              <p><center><strong>Speakers speaking in Zone1 and Zone4 (The speakers in Zone2 and Zone3 are absent in this example. Challenging case: as Zone4 is just behind Zone1 as shown in Fig. 1.)</strong></center></p>
+            </td>
+          </table>
+        </center>
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios_real_demo2/enh_zone1_copilot_front_1st-48-p00000015-00000513-f-norm-21-b.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_real_demo2/enh_zone1_copilot_front_1st-48-p00000015-00000513-f-norm-21-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed system (xv) separated (Zone1: S1)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_real_demo2/enh_zone2_mainDriver_front_1st-48-p00000015-00000513-f-norm-21-b.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_real_demo2/enh_zone2_mainDriver_front_1st-48-p00000015-00000513-f-norm-21-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed system (xv) separated (Zone2: S2)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_real_demo2/enh_zone3_back_of_mainDriver_1st-48-p00000015-00000513-f-norm-21-b.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_real_demo2/enh_zone3_back_of_mainDriver_1st-48-p00000015-00000513-f-norm-21-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed system (xv) separated (Zone3: S3)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_real_demo2/enh_zone4_back_of_copilot_1st-48-p00000015-00000513-f-norm-21-b.png" width="300" height="150"/></center></p>
+              <p><center><audio width="290" controls><source src="audios_real_demo2/enh_zone4_back_of_copilot_1st-48-p00000015-00000513-f-norm-21-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed system (xv) separated (Zone4: S4)</strong></center></p>
+            </td>
+          </table>
+        </center>        
+        
+         <!-- Performance of real data demo 3-->
+         <p class="auto-style5">&nbsp;</p>
+         <p id="performance" , class="auto-style4", style="color:blue;"><strong><u>5 Real-world recording demo 3: Separated signals of four car zones by the proposed system (xv).</u></strong></p>
+        
+        <!-- Audio 03 : Real demo3 -----------------------------------------------------------------------------------------------------------------------> 
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios_real_demo3/mix_1st-48-p00000030-00000517-f-norm-49-b.png" width="300" height="150" /></center></p>
+              <p><center><audio width="490" controls><source src="audios_real_demo3/mix_1st-48-p00000030-00000517-f-norm-49-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>No Processing (Mixture = S3 + S4 + noise)</strong></center></p>
+              <p><center><strong>Speakers speaking in Zone3 and Zone4 (The speakers in Zone1 and Zone2 are absent in this example. Challenging case: as Zone3 and Zone4 are both in the back-seats as shown in Fig. 1.)</strong></center></p>
+            </td>
+          </table>
+        </center>
+        <center>
+          <table width="1500" border="1">
+            <td width="300">
+              <p><center><img src="audios_real_demo3/enh_zone1_copilot_front_1st-48-p00000030-00000517-f-norm-49-b.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_real_demo3/enh_zone1_copilot_front_1st-48-p00000030-00000517-f-norm-49-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed system (xv) separated (Zone1: S1)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_real_demo3/enh_zone2_mainDriver_front_1st-48-p00000030-00000517-f-norm-49-b.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_real_demo3/enh_zone2_mainDriver_front_1st-48-p00000030-00000517-f-norm-49-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed system (xv) separated (Zone2: S2)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_real_demo3/enh_zone3_back_of_mainDriver_1st-48-p00000030-00000517-f-norm-49-b.png" width="300" height="150" /></center></p>
+              <p><center><audio width="290" controls><source src="audios_real_demo3/enh_zone3_back_of_mainDriver_1st-48-p00000030-00000517-f-norm-49-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed system (xv) separated (Zone3: S3)</strong></center></p>
+            </td>
+            <td width="300">
+              <p><center><img src="audios_real_demo3/enh_zone4_back_of_copilot_1st-48-p00000030-00000517-f-norm-49-b.png" width="300" height="150"/></center></p>
+              <p><center><audio width="290" controls><source src="audios_real_demo3/enh_zone4_back_of_copilot_1st-48-p00000030-00000517-f-norm-49-b.wav" type="audio/wav" >Your browser does not support the audio element.</audio></center></p>
+              <p><center><strong>Proposed system (xv) separated (Zone4: S4)</strong></center></p>
+            </td>
+          </table>
+        </center>        
+         
+          
+        
+<!-- Pyhton Packages -->
+<p class="auto-style5">&nbsp;</p>
+<p class="style2", style="color:blue;"><strong><span class="auto-style6"><u>6 Python Scripts and Sample Code: </u></span></strong></p>
+<ol>
+  <li> The model summary and the pytorch code in "Model.py" are given in the PNG format below. The python code will be released after the double-blind review process. </li>
+</ol>
+<!-- Model -->
+<p class="auto-style5">&nbsp;</p>
+<p class="style2", style="color:blue;"><strong><span class="auto-style6"><u>Model Summary</u></span></strong></p>
+<p align="justify" class="auto-style5-j">
+<center><img src="figures/zoneformer_model_details.png" width="940" /></center>
+</p>
+
+<!-- Code -->
+<p class="auto-style5">&nbsp;</p>
+<p class="style2", style="color:blue;"><strong><span class="auto-style6"><u>Model.py (The main forward pytorch code)</u></span></strong></p>
+<p align="justify" class="auto-style5-j">
+<center><img src="figures/Model.png" width="940" /></center>
+</p>
+
+<!-- Appendix -->
+<p class="auto-style5">&nbsp;</p>
+<p class="style2", style="color:blue;"><strong><span class="auto-style6"><u>7 Appendix</u></span></strong></p>
+<p id="ref_1" class="auto-style5">
+1) The pytorch model is converted through onnxruntime (version=1.12.0, https://onnxruntime.ai/) into the on-device ORT model.
+</p>
+
+
+        
+
+        <p class="auto-style5">&nbsp;</p>
+        <p id="reference" , class="auto-style4", style="color:blue;"><strong><u>References</u></strong></p>
+        <p id="ref_1" class="auto-style5">
+            Anonymous submission to INTERSPEECH 2023
+        </p>
+        <p class="auto-style1"><font color="#999999">Last update: March 10, 2023</font></p>
+</body>
+
+</html>
